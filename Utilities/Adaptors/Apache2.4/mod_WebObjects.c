@@ -452,7 +452,11 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
             long count;
 
             ap_rwrite(resp->content, resp->content_valid, r);
-            if (r->connection->aborted) {
+            if (r->connection->aborted)
+            {
+                WOLog(WO_DBG, "Connection aborted before all data was sent: %s", r->uri);
+                resp->keepConnection = 0;
+                
                 break;
             }
 
